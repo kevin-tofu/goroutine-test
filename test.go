@@ -53,7 +53,7 @@ func main() {
 	go processA(m1)
 	go processA(m2)
 
-	log.Println(runtime.NumGroutine()) // let us know numbers of goroutine
+	log.Println(runtime.NumGoroutine()) // let us know numbers of goroutine
 
 	fmt.Println("End - ProcessA")
 
