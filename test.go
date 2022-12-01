@@ -21,12 +21,23 @@ func processB(ch chan string, v string) {
 	ch <- v
 }
 
+func processC(name string, ch <-chan int) {
+	for {
+		i, ok := <-ch
+		if ok == false {
+			break
+		}
+		fmt.Println(name, i)
+	}
+	fmt.Println(name + " is done.")
+}
+
 func main() {
 
 	m1 := make(map[int]string)
 	m1[1] = "US"
-	m1[81] = "Japan"
-	m2 := map[int]string{2: "John", 4: "aa"}
+	m1[3] = "JP"
+	m2 := map[int]string{2: "John", 4: "Mana"}
 
 	fmt.Println("Start - ProcessA")
 
@@ -39,10 +50,32 @@ func main() {
 
 	fmt.Println("Start - ProcessB")
 
-	ch := make(chan string)
-	go processB(ch, "test")
+	chB := make(chan string)
+	go processB(chB, "test")
 
-	msg := <-ch
+	msg := <-chB
+	fmt.Println(msg)
+
+	fmt.Println("End - ProcessB")
+
+	// var ch1 chan int //
+	// var ch2 <-chan int //
+	// var ch3 chan<- int //
+
+	fmt.Println("Start - ProcessB")
+
+	chC := make(chan int, 20)
+	go processC("go-routine 1", chC)
+	go processC("go-routine 2", chC)
+	go processC("go-routine 3", chC)
+
+	i := 0
+	for i < 100 {
+		chC <- i
+		i++
+	}
+
+	close(chC)
 	fmt.Println(msg)
 
 	fmt.Println("End - ProcessB")
