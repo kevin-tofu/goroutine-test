@@ -65,6 +65,7 @@ func main() {
 
 	msg := <-chB
 	fmt.Println(msg)
+	time.Sleep(5 * time.Second)
 	fmt.Println("End - ProcessB")
 
 	fmt.Println("Start - ProcessC")
@@ -85,6 +86,7 @@ func main() {
 	}
 
 	close(chC)
+	time.Sleep(5 * time.Second)
 	fmt.Println("End - ProcessC")
 
 	fmt.Println("Start - processD")
