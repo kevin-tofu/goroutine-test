@@ -54,6 +54,7 @@ func main() {
 	go processA(m2)
 
 	log.Println(runtime.NumGoroutine()) // let us know numbers of goroutine
+	time.Sleep(5 * time.Second)
 
 	fmt.Println("End - ProcessA")
 
