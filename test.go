@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"runtime"
+	"sync"
 	"time"
 )
 
@@ -32,6 +33,14 @@ func processC(name string, ch <-chan int) {
 	fmt.Println(name + " is done.")
 }
 
+func processD(s string, wg *sync.WaitGroup) {
+	for i := 0; i < 5; i++ {
+		time.Sleep(100 * time.Millisecond)
+		fmt.Println(s)
+	}
+	wg.Done()
+}
+
 func main() {
 
 	m1 := make(map[int]string)
@@ -55,16 +64,15 @@ func main() {
 
 	msg := <-chB
 	fmt.Println(msg)
-
 	fmt.Println("End - ProcessB")
 
+	fmt.Println("Start - ProcessC")
+
+	chC := make(chan int, 20)
 	// var ch1 chan int //
 	// var ch2 <-chan int //
 	// var ch3 chan<- int //
 
-	fmt.Println("Start - ProcessB")
-
-	chC := make(chan int, 20)
 	go processC("go-routine 1", chC)
 	go processC("go-routine 2", chC)
 	go processC("go-routine 3", chC)
@@ -76,8 +84,13 @@ func main() {
 	}
 
 	close(chC)
-	fmt.Println(msg)
+	fmt.Println("End - ProcessC")
 
-	fmt.Println("End - ProcessB")
+	fmt.Println("Start - processD")
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go processD("Hello", &wg)
+	wg.Wait()
+	fmt.Println("Start - processD")
 
 }
