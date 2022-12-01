@@ -11,7 +11,7 @@ import (
 func processA(v map[int]string) {
 
 	for k, v := range v {
-		fmt.Printf("key: %s, value: %d\n", k, v)
+		fmt.Printf("key: %d, value: %s\n", k, v)
 		time.Sleep(1 * time.Second)
 		// fmt.Println(i, str)
 	}
